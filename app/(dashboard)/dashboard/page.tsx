@@ -1,9 +1,28 @@
 import { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { SystemCard } from "@/components/system-card";
+import type { Database } from "@/types/supabase";
 
 export const metadata: Metadata = {
   title: "Dashboard",
+};
+
+// Explicit types for the dashboard query result.
+// The Supabase client can't infer nested join types from the placeholder type file;
+// this will be replaced by the generated inference once `supabase gen types` runs.
+type SystemRow = Database["public"]["Tables"]["systems"]["Row"];
+type ScanRow = Database["public"]["Tables"]["scans"]["Row"];
+type PoamRow = Database["public"]["Tables"]["poam_items"]["Row"];
+
+type DashboardSystem = Pick<
+  SystemRow,
+  "id" | "name" | "short_code" | "fedramp_level" | "ato_expiration" | "agency_sponsor" | "status"
+> & {
+  scans: Pick<ScanRow, "scan_type" | "scan_date">[];
+  poam_items: Pick<
+    PoamRow,
+    "id" | "severity" | "status" | "sla_status" | "scheduled_completion"
+  >[];
 };
 
 export default async function DashboardPage() {
@@ -12,7 +31,13 @@ export default async function DashboardPage() {
   const { data: user } = await supabase.auth.getUser();
   if (!user.user) return null;
 
-  const { data: systems, error } = await supabase
+  // The `as unknown as` cast is intentional here: the placeholder types/supabase.ts
+  // does not include relationship definitions (Relationships[]), so the Supabase
+  // client cannot infer nested join shapes. The cast is safe because the select
+  // string exactly matches the DashboardSystem shape above.
+  // This cast is removed once `supabase gen types typescript` runs against the
+  // live database and replaces types/supabase.ts.
+  const { data, error } = await supabase
     .from("systems")
     .select(`
       id,
@@ -36,6 +61,8 @@ export default async function DashboardPage() {
     `)
     .eq("status", "active")
     .order("name");
+
+  const systems = data as unknown as DashboardSystem[] | null;
 
   if (error) {
     throw new Error(`Failed to load systems: ${error.message}`);

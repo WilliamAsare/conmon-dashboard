@@ -7,7 +7,8 @@
  * Never use this in Client Components.
  */
 
-import { createServerClient } from "@supabase/ssr";
+import { createServerClient, type CookieOptions } from "@supabase/ssr";
+import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 import type { Database } from "@/types/supabase";
 
@@ -28,7 +29,7 @@ export async function createClient() {
       getAll() {
         return cookieStore.getAll();
       },
-      setAll(cookiesToSet) {
+      setAll(cookiesToSet: Array<{ name: string; value: string; options?: CookieOptions }>) {
         try {
           cookiesToSet.forEach(({ name, value, options }) =>
             cookieStore.set(name, value, options)
@@ -57,8 +58,7 @@ export function createServiceClient() {
   }
 
   // The service client does not use cookies — it operates as a superuser.
-  const { createClient } = require("@supabase/supabase-js");
-  return createClient<Database>(url, key, {
+  return createSupabaseClient<Database>(url, key, {
     auth: {
       autoRefreshToken: false,
       persistSession: false,
