@@ -8,14 +8,23 @@ export type SignUpActionState =
   | { status: "success" }
   | { status: "error"; message: string };
 
-const SignUpSchema = z.object({
+const BaseSignUpSchema = z.object({
   full_name: z.string().min(1, "Name is required").max(100),
-  organization_name: z.string().min(1, "Organization name is required").max(200),
   email: z.string().email("Enter a valid email address"),
-  password: z
-    .string()
-    .min(12, "Password must be at least 12 characters")
-    .max(128),
+  password: z.string().min(12, "Password must be at least 12 characters").max(128),
+  // invite_token is present when accepting an invite; org name not needed then
+  invite_token:      z.string().optional(),
+  organization_name: z.string().max(200).optional(),
+});
+
+const SignUpSchema = BaseSignUpSchema.superRefine((data, ctx) => {
+  if (!data.invite_token && !data.organization_name?.trim()) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Organization name is required",
+      path: ["organization_name"],
+    });
+  }
 });
 
 export async function signUp(
@@ -23,10 +32,11 @@ export async function signUp(
   formData: FormData
 ): Promise<SignUpActionState> {
   const result = SignUpSchema.safeParse({
-    full_name: formData.get("full_name"),
+    full_name:         formData.get("full_name"),
     organization_name: formData.get("organization_name"),
-    email: formData.get("email"),
-    password: formData.get("password"),
+    email:             formData.get("email"),
+    password:          formData.get("password"),
+    invite_token:      formData.get("invite_token") || undefined,
   });
 
   if (!result.success) {
@@ -34,20 +44,25 @@ export async function signUp(
     return { status: "error", message };
   }
 
-  const { full_name, organization_name, email, password } = result.data;
+  const { full_name, organization_name, email, password, invite_token } = result.data;
   const supabase = await createClient();
 
-  // 1. Create the auth user. Supabase will send a confirmation email.
+  // Build metadata — the DB trigger reads this to either:
+  //   a) accept an invite and join an existing org (when invite_token present), or
+  //   b) create a brand-new organization (normal signup).
+  const metadata: Record<string, string> = { full_name };
+  if (invite_token) {
+    metadata["invite_token"] = invite_token;
+  } else if (organization_name) {
+    metadata["organization_name"] = organization_name;
+  }
+
   const { data: authData, error: authError } = await supabase.auth.signUp({
     email,
     password,
     options: {
       emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback`,
-      // Pass metadata so the database trigger can create the org and profile.
-      data: {
-        full_name,
-        organization_name,
-      },
+      data: metadata,
     },
   });
 
@@ -58,14 +73,6 @@ export async function signUp(
   if (!authData.user) {
     return { status: "error", message: "Registration failed. Please try again." };
   }
-
-  // 2. The auth trigger (see migration) handles creating the Organization and
-  //    the public.users row. We do not do it here to avoid a race condition
-  //    and to ensure it runs with the correct permissions.
-  //
-  //    If email confirmation is disabled (local dev), the user is immediately
-  //    active and the trigger will have fired. In production, the trigger fires
-  //    after email confirmation.
 
   return { status: "success" };
 }

@@ -1,8 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // typedRoutes is re-enabled once all route files exist.
-  // It currently flags unbuilt routes (scans, poams, deviations, reports) as type errors.
+  experimental: {
+    serverActions: {
+      // Allow up to 10 MB uploads through server actions (evidence files).
+      bodySizeLimit: "10mb",
+    },
+  },
 };
 
 export default nextConfig;

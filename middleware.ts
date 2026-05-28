@@ -12,7 +12,7 @@ import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import type { Database } from "@/types/supabase";
 
-const PUBLIC_ROUTES = ["/login", "/signup", "/auth/callback", "/auth/confirm"];
+const PUBLIC_ROUTES = ["/login", "/signup", "/auth/callback", "/auth/confirm", "/portal", "/auth/mfa-verify", "/invite"];
 
 export async function middleware(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
@@ -59,6 +59,23 @@ export async function middleware(request: NextRequest) {
     redirectUrl.pathname = "/login";
     redirectUrl.searchParams.set("redirectTo", pathname);
     return NextResponse.redirect(redirectUrl);
+  }
+
+  // MFA enforcement: if the user has enrolled a TOTP factor but hasn't
+  // verified it this session (aal1 < aal2), redirect to the verify page.
+  // FedRAMP IA-2(1): MFA required for privileged accounts.
+  if (user && !isPublicRoute && pathname !== "/auth/mfa-verify") {
+    const { data: aalData } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+    if (
+      aalData &&
+      aalData.nextLevel === "aal2" &&
+      aalData.currentLevel !== "aal2"
+    ) {
+      const mfaUrl = request.nextUrl.clone();
+      mfaUrl.pathname = "/auth/mfa-verify";
+      mfaUrl.searchParams.set("redirectTo", pathname);
+      return NextResponse.redirect(mfaUrl);
+    }
   }
 
   return supabaseResponse;

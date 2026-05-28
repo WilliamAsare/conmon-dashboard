@@ -1,0 +1,25 @@
+name: ConMon — SLA Recalculation
+
+on:
+  schedule:
+    # Every day at 00:30 UTC — same schedule as the old vercel.json cron
+    - cron: '30 0 * * *'
+  workflow_dispatch:
+    # Allows manual trigger from the GitHub Actions tab
+
+jobs:
+  recalculate-sla:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Call SLA recalculation endpoint
+        run: |
+          STATUS=$(curl -s -o /tmp/body.txt -w "%{http_code}" \
+            -X GET "${{ secrets.APP_URL }}/api/cron/sla" \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}")
+          echo "HTTP $STATUS"
+          cat /tmp/body.txt
+          if [ "$STATUS" != "200" ]; then
+            echo "::error::SLA cron returned HTTP $STATUS"
+            exit 1
+          fi

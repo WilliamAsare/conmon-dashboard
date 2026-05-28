@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { useSearchParams } from "next/navigation";
 import { signUp } from "./actions";
 import type { SignUpActionState } from "./actions";
 
@@ -8,6 +9,11 @@ const initialState: SignUpActionState = { status: "idle" };
 
 export function SignUpForm() {
   const [state, action, pending] = useActionState(signUp, initialState);
+  const searchParams = useSearchParams();
+
+  const inviteToken = searchParams.get("invite");
+  const inviteEmail = searchParams.get("email") ?? "";
+  const isInvite    = !!inviteToken;
 
   if (state.status === "success") {
     return (
@@ -15,7 +21,7 @@ export function SignUpForm() {
         <p className="font-medium">Check your inbox</p>
         <p className="text-sm text-muted-foreground">
           We sent a confirmation link to your email. Click it to activate your
-          account and start using ConMon.
+          account and {isInvite ? "join your organization" : "start using ConMon"}.
         </p>
       </div>
     );
@@ -23,10 +29,13 @@ export function SignUpForm() {
 
   return (
     <form action={action} className="space-y-4">
+      {/* Hidden invite token */}
+      {inviteToken && (
+        <input type="hidden" name="invite_token" value={inviteToken} />
+      )}
+
       <div className="space-y-1">
-        <label htmlFor="full_name" className="text-sm font-medium">
-          Full name
-        </label>
+        <label htmlFor="full_name" className="text-sm font-medium">Full name</label>
         <input
           id="full_name"
           name="full_name"
@@ -38,39 +47,45 @@ export function SignUpForm() {
         />
       </div>
 
-      <div className="space-y-1">
-        <label htmlFor="organization_name" className="text-sm font-medium">
-          Organization name
-        </label>
-        <input
-          id="organization_name"
-          name="organization_name"
-          type="text"
-          required
-          className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          placeholder="Acme Cloud Services"
-        />
-      </div>
+      {/* Organization name — hidden when joining via invite */}
+      {!isInvite && (
+        <div className="space-y-1">
+          <label htmlFor="organization_name" className="text-sm font-medium">Organization name</label>
+          <input
+            id="organization_name"
+            name="organization_name"
+            type="text"
+            required
+            className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            placeholder="Acme Cloud Services"
+          />
+        </div>
+      )}
 
       <div className="space-y-1">
-        <label htmlFor="email" className="text-sm font-medium">
-          Work email
-        </label>
+        <label htmlFor="email" className="text-sm font-medium">Work email</label>
         <input
           id="email"
           name="email"
           type="email"
           autoComplete="email"
           required
-          className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          readOnly={isInvite}
+          defaultValue={inviteEmail}
+          className={`w-full rounded-md border border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+            isInvite ? "opacity-60 cursor-not-allowed" : ""
+          }`}
           placeholder="you@yourcompany.com"
         />
+        {isInvite && (
+          <p className="text-xs text-muted-foreground">
+            You must sign up with this invited email address.
+          </p>
+        )}
       </div>
 
       <div className="space-y-1">
-        <label htmlFor="password" className="text-sm font-medium">
-          Password
-        </label>
+        <label htmlFor="password" className="text-sm font-medium">Password</label>
         <input
           id="password"
           name="password"
@@ -80,15 +95,11 @@ export function SignUpForm() {
           className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           aria-describedby="password-hint"
         />
-        <p id="password-hint" className="text-xs text-muted-foreground">
-          At least 12 characters.
-        </p>
+        <p id="password-hint" className="text-xs text-muted-foreground">At least 12 characters.</p>
       </div>
 
       {state.status === "error" && (
-        <p role="alert" className="text-sm text-destructive">
-          {state.message}
-        </p>
+        <p role="alert" className="text-sm text-destructive">{state.message}</p>
       )}
 
       <button
@@ -96,14 +107,16 @@ export function SignUpForm() {
         disabled={pending}
         className="w-full rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
       >
-        {pending ? "Creating account..." : "Create account"}
+        {pending
+          ? "Creating account…"
+          : isInvite
+            ? "Create account & join organization"
+            : "Create account"}
       </button>
 
       <p className="text-center text-sm text-muted-foreground">
         Already have an account?{" "}
-        <a href="/login" className="underline underline-offset-4 hover:text-foreground">
-          Sign in
-        </a>
+        <a href="/login" className="underline underline-offset-4 hover:text-foreground">Sign in</a>
       </p>
     </form>
   );

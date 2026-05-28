@@ -1,0 +1,25 @@
+name: ConMon — SLA Notifications
+
+on:
+  schedule:
+    # Every day at 01:00 UTC — runs after the SLA recalc at 00:30
+    - cron: '0 1 * * *'
+  workflow_dispatch:
+    # Allows manual trigger from the GitHub Actions tab
+
+jobs:
+  send-notifications:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Call notification endpoint
+        run: |
+          STATUS=$(curl -s -o /tmp/body.txt -w "%{http_code}" \
+            -X GET "${{ secrets.APP_URL }}/api/cron/notify" \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}")
+          echo "HTTP $STATUS"
+          cat /tmp/body.txt
+          if [ "$STATUS" != "200" ]; then
+            echo "::error::Notify cron returned HTTP $STATUS"
+            exit 1
+          fi

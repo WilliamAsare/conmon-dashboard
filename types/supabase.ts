@@ -6,6 +6,10 @@
  *
  * Placeholder until a Supabase project is connected and migrations run.
  * Run: `supabase gen types typescript --local > types/supabase.ts`
+ *
+ * NOTE: `Relationships: []` is required on every table so that
+ * @supabase/supabase-js v2's generic select type-inference doesn't
+ * collapse to `never`. Replace with generated types once connected.
  */
 
 export type Json =
@@ -23,18 +27,296 @@ export type Database = {
         Row: {
           id: string;
           name: string;
+          status: "active" | "suspended";
           created_at: string;
         };
         Insert: {
           id?: string;
           name: string;
+          status?: "active" | "suspended";
           created_at?: string;
         };
         Update: {
           id?: string;
           name?: string;
+          status?: "active" | "suspended";
           created_at?: string;
         };
+        Relationships: [];
+      };
+      platform_admins: {
+        Row: {
+          user_id: string;
+          granted_at: string;
+          granted_by: string | null;
+        };
+        Insert: {
+          user_id: string;
+          granted_at?: string;
+          granted_by?: string | null;
+        };
+        Update: {
+          user_id?: string;
+          granted_at?: string;
+          granted_by?: string | null;
+        };
+        Relationships: [];
+      };
+      cron_runs: {
+        Row: {
+          id: string;
+          cron_name: string;
+          started_at: string;
+          finished_at: string | null;
+          status: "ok" | "error";
+          result: Json | null;
+          error_message: string | null;
+        };
+        Insert: {
+          id?: string;
+          cron_name: string;
+          started_at?: string;
+          finished_at?: string | null;
+          status?: "ok" | "error";
+          result?: Json | null;
+          error_message?: string | null;
+        };
+        Update: {
+          id?: string;
+          cron_name?: string;
+          started_at?: string;
+          finished_at?: string | null;
+          status?: "ok" | "error";
+          result?: Json | null;
+          error_message?: string | null;
+        };
+        Relationships: [];
+      };
+      inventory_items: {
+        Row: {
+          id: string;
+          system_id: string;
+          organization_id: string;
+          item_type: "hardware" | "software";
+          name: string;
+          vendor: string | null;
+          version: string | null;
+          asset_tag: string | null;
+          ip_address: string | null;
+          mac_address: string | null;
+          os_name: string | null;
+          cpe: string | null;
+          status: "active" | "inactive" | "decommissioned";
+          notes: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          system_id: string;
+          organization_id: string;
+          item_type: "hardware" | "software";
+          name: string;
+          vendor?: string | null;
+          version?: string | null;
+          asset_tag?: string | null;
+          ip_address?: string | null;
+          mac_address?: string | null;
+          os_name?: string | null;
+          cpe?: string | null;
+          status?: "active" | "inactive" | "decommissioned";
+          notes?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          system_id?: string;
+          organization_id?: string;
+          item_type?: "hardware" | "software";
+          name?: string;
+          vendor?: string | null;
+          version?: string | null;
+          asset_tag?: string | null;
+          ip_address?: string | null;
+          mac_address?: string | null;
+          os_name?: string | null;
+          cpe?: string | null;
+          status?: "active" | "inactive" | "decommissioned";
+          notes?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      incidents: {
+        Row: {
+          id: string;
+          system_id: string;
+          organization_id: string;
+          title: string;
+          description: string;
+          severity: "high" | "moderate" | "low";
+          status: "open" | "investigating" | "contained" | "resolved" | "closed";
+          detected_at: string;
+          reported_at: string;
+          contained_at: string | null;
+          resolved_at: string | null;
+          reported_within_sla: boolean;
+          affected_controls: string[];
+          reported_by: string | null;
+          notes: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          system_id: string;
+          organization_id: string;
+          title: string;
+          description: string;
+          severity: "high" | "moderate" | "low";
+          status?: "open" | "investigating" | "contained" | "resolved" | "closed";
+          detected_at: string;
+          reported_at?: string;
+          contained_at?: string | null;
+          resolved_at?: string | null;
+          affected_controls?: string[];
+          reported_by?: string | null;
+          notes?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          system_id?: string;
+          organization_id?: string;
+          title?: string;
+          description?: string;
+          severity?: "high" | "moderate" | "low";
+          status?: "open" | "investigating" | "contained" | "resolved" | "closed";
+          detected_at?: string;
+          reported_at?: string;
+          contained_at?: string | null;
+          resolved_at?: string | null;
+          affected_controls?: string[];
+          reported_by?: string | null;
+          notes?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      assessments: {
+        Row: {
+          id: string;
+          system_id: string;
+          organization_id: string;
+          assessment_type: "annual" | "significant_change" | "focused";
+          assessor_name: string;
+          status: "planned" | "in_progress" | "completed" | "cancelled";
+          planned_start: string;
+          planned_end: string;
+          actual_start: string | null;
+          actual_end: string | null;
+          findings_count: number;
+          report_url: string | null;
+          notes: string | null;
+          created_by: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          system_id: string;
+          organization_id: string;
+          assessment_type: "annual" | "significant_change" | "focused";
+          assessor_name: string;
+          status?: "planned" | "in_progress" | "completed" | "cancelled";
+          planned_start: string;
+          planned_end: string;
+          actual_start?: string | null;
+          actual_end?: string | null;
+          findings_count?: number;
+          report_url?: string | null;
+          notes?: string | null;
+          created_by?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          system_id?: string;
+          organization_id?: string;
+          assessment_type?: "annual" | "significant_change" | "focused";
+          assessor_name?: string;
+          status?: "planned" | "in_progress" | "completed" | "cancelled";
+          planned_start?: string;
+          planned_end?: string;
+          actual_start?: string | null;
+          actual_end?: string | null;
+          findings_count?: number;
+          report_url?: string | null;
+          notes?: string | null;
+          created_by?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      share_tokens: {
+        Row: {
+          id: string;
+          system_id: string;
+          org_id: string;
+          token: string;
+          label: string;
+          expires_at: string | null;
+          created_by: string | null;
+          created_at: string;
+          last_used_at: string | null;
+          revoked_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          system_id: string;
+          org_id: string;
+          token: string;
+          label?: string;
+          expires_at?: string | null;
+          created_by?: string | null;
+          created_at?: string;
+          last_used_at?: string | null;
+          revoked_at?: string | null;
+        };
+        Update: {
+          id?: string;
+          system_id?: string;
+          org_id?: string;
+          token?: string;
+          label?: string;
+          expires_at?: string | null;
+          created_by?: string | null;
+          created_at?: string;
+          last_used_at?: string | null;
+          revoked_at?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "share_tokens_system_id_fkey";
+            columns: ["system_id"];
+            isOneToOne: false;
+            referencedRelation: "systems";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "share_tokens_org_id_fkey";
+            columns: ["org_id"];
+            isOneToOne: false;
+            referencedRelation: "organizations";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       users: {
         Row: {
@@ -58,6 +340,15 @@ export type Database = {
           full_name?: string;
           created_at?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: "users_organization_id_fkey";
+            columns: ["organization_id"];
+            isOneToOne: false;
+            referencedRelation: "organizations";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       systems: {
         Row: {
@@ -99,6 +390,15 @@ export type Database = {
           poam_sequence?: number;
           created_at?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: "systems_organization_id_fkey";
+            columns: ["organization_id"];
+            isOneToOne: false;
+            referencedRelation: "organizations";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       scans: {
         Row: {
@@ -134,6 +434,22 @@ export type Database = {
           raw_file_url?: string | null;
           created_at?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: "scans_system_id_fkey";
+            columns: ["system_id"];
+            isOneToOne: false;
+            referencedRelation: "systems";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "scans_uploaded_by_fkey";
+            columns: ["uploaded_by"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       findings: {
         Row: {
@@ -154,6 +470,7 @@ export type Database = {
             | "deviation_pending"
             | "deviation_approved"
             | "risk_accepted";
+          control_ids: string[];
           created_at: string;
         };
         Insert: {
@@ -168,6 +485,7 @@ export type Database = {
           affected_asset: string;
           first_detected: string;
           last_detected: string;
+          control_ids?: string[];
           status?:
             | "open"
             | "remediated"
@@ -196,11 +514,103 @@ export type Database = {
             | "risk_accepted";
           created_at?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: "findings_scan_id_fkey";
+            columns: ["scan_id"];
+            isOneToOne: false;
+            referencedRelation: "scans";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "findings_system_id_fkey";
+            columns: ["system_id"];
+            isOneToOne: false;
+            referencedRelation: "systems";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      invitations: {
+        Row: {
+          id:              string;
+          organization_id: string;
+          email:           string;
+          role:            "admin" | "issm" | "isso" | "engineer" | "auditor";
+          token:           string;
+          invited_by:      string | null;
+          created_at:      string;
+          expires_at:      string;
+          accepted_at:     string | null;
+        };
+        Insert: {
+          id?:             string;
+          organization_id: string;
+          email:           string;
+          role?:           "admin" | "issm" | "isso" | "engineer" | "auditor";
+          token?:          string;
+          invited_by?:     string | null;
+          created_at?:     string;
+          expires_at?:     string;
+          accepted_at?:    string | null;
+        };
+        Update: {
+          id?:             string;
+          organization_id?: string;
+          email?:          string;
+          role?:           "admin" | "issm" | "isso" | "engineer" | "auditor";
+          token?:          string;
+          invited_by?:     string | null;
+          created_at?:     string;
+          expires_at?:     string;
+          accepted_at?:    string | null;
+        };
+        Relationships: [];
+      };
+      evidence_files: {
+        Row: {
+          id: string;
+          organization_id: string;
+          entity_type: "poam_item" | "assessment" | "incident";
+          entity_id: string;
+          file_name: string;
+          file_path: string;
+          file_size: number | null;
+          mime_type: string | null;
+          uploaded_by: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          organization_id: string;
+          entity_type: "poam_item" | "assessment" | "incident";
+          entity_id: string;
+          file_name: string;
+          file_path: string;
+          file_size?: number | null;
+          mime_type?: string | null;
+          uploaded_by?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          organization_id?: string;
+          entity_type?: "poam_item" | "assessment" | "incident";
+          entity_id?: string;
+          file_name?: string;
+          file_path?: string;
+          file_size?: number | null;
+          mime_type?: string | null;
+          uploaded_by?: string | null;
+          created_at?: string;
+        };
+        Relationships: [];
       };
       poam_items: {
         Row: {
           id: string;
           system_id: string;
+          organization_id: string;
           finding_id: string | null;
           poam_number: string;
           weakness_description: string;
@@ -213,14 +623,17 @@ export type Database = {
           milestones: Json;
           point_of_contact: string | null;
           resources_required: string | null;
+          control_ids: string[];
           days_to_sla: number | null;
           sla_status: "ok" | "warning" | "overdue" | "not_applicable";
+          notes: string | null;
           created_at: string;
           updated_at: string;
         };
         Insert: {
           id?: string;
           system_id: string;
+          organization_id: string;
           finding_id?: string | null;
           poam_number: string;
           weakness_description: string;
@@ -233,14 +646,17 @@ export type Database = {
           milestones?: Json;
           point_of_contact?: string | null;
           resources_required?: string | null;
+          control_ids?: string[];
           days_to_sla?: number | null;
           sla_status?: "ok" | "warning" | "overdue" | "not_applicable";
+          notes?: string | null;
           created_at?: string;
           updated_at?: string;
         };
         Update: {
           id?: string;
           system_id?: string;
+          organization_id?: string;
           finding_id?: string | null;
           poam_number?: string;
           weakness_description?: string;
@@ -253,11 +669,29 @@ export type Database = {
           milestones?: Json;
           point_of_contact?: string | null;
           resources_required?: string | null;
+          control_ids?: string[];
           days_to_sla?: number | null;
           sla_status?: "ok" | "warning" | "overdue" | "not_applicable";
+          notes?: string | null;
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: "poam_items_system_id_fkey";
+            columns: ["system_id"];
+            isOneToOne: false;
+            referencedRelation: "systems";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "poam_items_finding_id_fkey";
+            columns: ["finding_id"];
+            isOneToOne: false;
+            referencedRelation: "findings";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       deviation_requests: {
         Row: {
@@ -308,6 +742,36 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: "deviation_requests_organization_id_fkey";
+            columns: ["organization_id"];
+            isOneToOne: false;
+            referencedRelation: "organizations";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "deviation_requests_poam_id_fkey";
+            columns: ["poam_id"];
+            isOneToOne: false;
+            referencedRelation: "poam_items";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "deviation_requests_requested_by_fkey";
+            columns: ["requested_by"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "deviation_requests_reviewer_id_fkey";
+            columns: ["reviewer_id"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       scrs: {
         Row: {
@@ -373,6 +837,22 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: "scrs_organization_id_fkey";
+            columns: ["organization_id"];
+            isOneToOne: false;
+            referencedRelation: "organizations";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "scrs_system_id_fkey";
+            columns: ["system_id"];
+            isOneToOne: false;
+            referencedRelation: "systems";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       conmon_reports: {
         Row: {
@@ -405,6 +885,22 @@ export type Database = {
           generated_at?: string;
           generated_by?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: "conmon_reports_organization_id_fkey";
+            columns: ["organization_id"];
+            isOneToOne: false;
+            referencedRelation: "organizations";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "conmon_reports_system_id_fkey";
+            columns: ["system_id"];
+            isOneToOne: false;
+            referencedRelation: "systems";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       audit_log: {
         Row: {
@@ -438,6 +934,7 @@ export type Database = {
           diff?: Json | null;
           created_at?: string;
         };
+        Relationships: [];
       };
       notifications: {
         Row: {
@@ -491,9 +988,27 @@ export type Database = {
           read_at?: string | null;
           created_at?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: "notifications_organization_id_fkey";
+            columns: ["organization_id"];
+            isOneToOne: false;
+            referencedRelation: "organizations";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "notifications_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+        ];
       };
     };
-    Views: Record<string, never>;
+    Views: {
+      [_ in never]: never;
+    };
     Functions: {
       next_poam_sequence: {
         Args: { p_system_id: string };
@@ -513,6 +1028,45 @@ export type Database = {
         Args: Record<string, never>;
         Returns: void;
       };
+      get_invitation_by_token: {
+        Args: { p_token: string };
+        Returns: Array<{
+          organization_id:   string;
+          organization_name: string;
+          email:             string;
+          role:              "admin" | "issm" | "isso" | "engineer" | "auditor";
+          expires_at:        string;
+          accepted_at:       string | null;
+        }>;
+      };
+      get_org_members: {
+        Args: Record<string, never>;
+        Returns: Array<{
+          id:         string;
+          full_name:  string;
+          role:       "admin" | "issm" | "isso" | "engineer" | "auditor";
+          email:      string;
+          created_at: string;
+        }>;
+      };
+      update_member_role: {
+        Args: {
+          p_user_id: string;
+          p_role: "admin" | "issm" | "isso" | "engineer" | "auditor";
+        };
+        Returns: void;
+      };
+      remove_member: {
+        Args: { p_user_id: string };
+        Returns: void;
+      };
+      update_organization_name: {
+        Args: { p_name: string };
+        Returns: void;
+      };
+    };
+    CompositeTypes: {
+      [_ in never]: never;
     };
     Enums: {
       user_role: "admin" | "issm" | "isso" | "engineer" | "auditor";

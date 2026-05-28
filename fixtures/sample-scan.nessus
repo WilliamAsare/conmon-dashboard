@@ -1,0 +1,513 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<NessusClientData_v2>
+  <Report name="Meridian Finance - Monthly ConMon - May 2026">
+    <ReportHost name="web-prod-01.meridian.gov">
+      <HostProperties>
+        <tag name="host-ip">10.10.1.11</tag>
+        <tag name="host-fqdn">web-prod-01.meridian.gov</tag>
+        <tag name="operating-system">Linux Kernel 5.15 on Amazon Linux 2</tag>
+        <tag name="HOST_END">Wed May 27 06:00:00 2026</tag>
+      </HostProperties>
+      <!-- Critical: Log4Shell -->
+      <ReportItem port="443" svc_name="https" protocol="tcp" severity="4" pluginID="155999" pluginName="Apache Log4j 2.x &lt; 2.17.0 Multiple Vulnerabilities (Log4Shell)">
+        <description>The version of Apache Log4j on the remote host is 2.x prior to 2.17.0. It is, therefore, affected by multiple vulnerabilities including remote code execution via JNDI lookup in log messages.</description>
+        <synopsis>The remote host is running a vulnerable version of Apache Log4j.</synopsis>
+        <cvss3_base_score>10.0</cvss3_base_score>
+        <cvss_base_score>9.3</cvss_base_score>
+        <cve>CVE-2021-44228</cve>
+        <cve>CVE-2021-45046</cve>
+        <cve>CVE-2021-45105</cve>
+        <risk_factor>Critical</risk_factor>
+      </ReportItem>
+      <!-- Critical: OpenSSL RCE -->
+      <ReportItem port="443" svc_name="https" protocol="tcp" severity="4" pluginID="168096" pluginName="OpenSSL 3.0.x &lt; 3.0.7 Multiple Vulnerabilities">
+        <description>The version of OpenSSL installed on the remote host is 3.0.x prior to 3.0.7. It is affected by buffer overflow vulnerabilities in the X.509 certificate verification code.</description>
+        <synopsis>The remote host has an outdated OpenSSL installation.</synopsis>
+        <cvss3_base_score>9.8</cvss3_base_score>
+        <cvss_base_score>9.0</cvss_base_score>
+        <cve>CVE-2022-3786</cve>
+        <cve>CVE-2022-3602</cve>
+        <risk_factor>Critical</risk_factor>
+      </ReportItem>
+      <!-- High: Apache HTTP Server RCE -->
+      <ReportItem port="443" svc_name="https" protocol="tcp" severity="3" pluginID="161508" pluginName="Apache HTTP Server 2.4.x &lt; 2.4.54 Multiple Vulnerabilities">
+        <description>The version of Apache httpd installed on the remote host is prior to 2.4.54 and is affected by multiple vulnerabilities including path traversal and remote code execution.</description>
+        <synopsis>The remote web server is affected by multiple vulnerabilities.</synopsis>
+        <cvss3_base_score>9.1</cvss3_base_score>
+        <cvss_base_score>8.5</cvss_base_score>
+        <cve>CVE-2022-31813</cve>
+        <cve>CVE-2022-26377</cve>
+        <cve>CVE-2022-28330</cve>
+        <risk_factor>High</risk_factor>
+      </ReportItem>
+      <!-- High: Spring Framework RCE -->
+      <ReportItem port="8080" svc_name="http-alt" protocol="tcp" severity="3" pluginID="159519" pluginName="Spring Framework Remote Code Execution (Spring4Shell)">
+        <description>The remote host is running a version of Spring Framework affected by CVE-2022-22965 (Spring4Shell). A Spring MVC or Spring WebFlux application running on JDK 9+ may be vulnerable to remote code execution.</description>
+        <synopsis>The remote host is affected by a critical Spring Framework RCE vulnerability.</synopsis>
+        <cvss3_base_score>9.8</cvss3_base_score>
+        <cvss_base_score>7.5</cvss_base_score>
+        <cve>CVE-2022-22965</cve>
+        <risk_factor>Critical</risk_factor>
+      </ReportItem>
+      <!-- High: SSH Weak Algorithms -->
+      <ReportItem port="22" svc_name="ssh" protocol="tcp" severity="3" pluginID="153953" pluginName="SSH Server CBC Mode Ciphers Enabled">
+        <description>The SSH server is configured to support Cipher Block Chaining (CBC) encryption. This may allow an attacker to recover the plaintext message from the ciphertext.</description>
+        <synopsis>The SSH server is configured to use Cipher Block Chaining.</synopsis>
+        <cvss3_base_score>7.5</cvss3_base_score>
+        <cvss_base_score>5.0</cvss_base_score>
+        <risk_factor>High</risk_factor>
+      </ReportItem>
+      <!-- Medium: TLS 1.1 -->
+      <ReportItem port="443" svc_name="https" protocol="tcp" severity="2" pluginID="104743" pluginName="TLS Version 1.1 Protocol Deprecated">
+        <description>The remote service accepts connections encrypted using TLS 1.1. TLS 1.1 lacks support for current and recommended cipher suites. NIST has deprecated TLS 1.1.</description>
+        <synopsis>The remote service encrypts traffic using an older version of TLS.</synopsis>
+        <cvss3_base_score>6.5</cvss3_base_score>
+        <cvss_base_score>5.0</cvss_base_score>
+        <cve>CVE-2011-3389</cve>
+        <risk_factor>Medium</risk_factor>
+      </ReportItem>
+      <!-- Medium: HSTS Missing -->
+      <ReportItem port="443" svc_name="https" protocol="tcp" severity="2" pluginID="84502" pluginName="HSTS Missing From HTTPS Server">
+        <description>The remote web server is not enforcing HTTPS Strict Transport Security (HSTS). HSTS instructs browsers to only use HTTPS connections.</description>
+        <synopsis>The remote web server is missing a HSTS header.</synopsis>
+        <cvss3_base_score>4.3</cvss3_base_score>
+        <risk_factor>Medium</risk_factor>
+      </ReportItem>
+      <!-- Low: X-Content-Type-Options Missing -->
+      <ReportItem port="443" svc_name="https" protocol="tcp" severity="1" pluginID="121010" pluginName="Missing X-Content-Type-Options Header">
+        <description>The remote web server does not send the X-Content-Type-Options HTTP response header, which can allow browsers to MIME-sniff the content-type.</description>
+        <synopsis>The remote web server is missing the X-Content-Type-Options header.</synopsis>
+        <cvss3_base_score>2.6</cvss3_base_score>
+        <risk_factor>Low</risk_factor>
+      </ReportItem>
+      <!-- Informational: Nessus SYN scanner -->
+      <ReportItem port="0" svc_name="general" protocol="tcp" severity="0" pluginID="11219" pluginName="Nessus SYN Scanner">
+        <description>This plugin is a SYN 'half-open' port scanner.</description>
+        <risk_factor>None</risk_factor>
+      </ReportItem>
+    </ReportHost>
+
+    <ReportHost name="api-prod-01.meridian.gov">
+      <HostProperties>
+        <tag name="host-ip">10.10.1.12</tag>
+        <tag name="host-fqdn">api-prod-01.meridian.gov</tag>
+        <tag name="operating-system">Linux Kernel 5.15 on Ubuntu 22.04</tag>
+        <tag name="HOST_END">Wed May 27 06:15:00 2026</tag>
+      </HostProperties>
+      <!-- Critical: Sudo Privilege Escalation -->
+      <ReportItem port="0" svc_name="general" protocol="tcp" severity="4" pluginID="146784" pluginName="sudo Privilege Escalation (Baron Samedit)">
+        <description>The version of sudo installed on the remote host is vulnerable to a heap buffer overflow in the way Sudo parses command line arguments. This allows any local user to gain root privileges.</description>
+        <synopsis>The remote host is affected by a privilege escalation vulnerability in sudo.</synopsis>
+        <cvss3_base_score>7.8</cvss3_base_score>
+        <cvss_base_score>7.2</cvss_base_score>
+        <cve>CVE-2021-3156</cve>
+        <risk_factor>High</risk_factor>
+      </ReportItem>
+      <!-- Critical: Polkit Privilege Escalation -->
+      <ReportItem port="0" svc_name="general" protocol="tcp" severity="4" pluginID="156899" pluginName="Polkit Privilege Escalation (PwnKit)">
+        <description>The version of polkit (PolicyKit) installed on the remote host is affected by a local privilege escalation vulnerability. A local user can exploit this to gain root access.</description>
+        <synopsis>The remote host is affected by a local privilege escalation in polkit.</synopsis>
+        <cvss3_base_score>7.8</cvss3_base_score>
+        <cvss_base_score>7.2</cvss_base_score>
+        <cve>CVE-2021-4034</cve>
+        <risk_factor>High</risk_factor>
+      </ReportItem>
+      <!-- High: Node.js outdated -->
+      <ReportItem port="3000" svc_name="http" protocol="tcp" severity="3" pluginID="167021" pluginName="Node.js &lt; 16.18.1 / 18.12.1 Multiple Vulnerabilities">
+        <description>The version of Node.js installed on the remote host is affected by multiple vulnerabilities including path traversal and prototype pollution.</description>
+        <synopsis>The remote host contains an outdated version of Node.js.</synopsis>
+        <cvss3_base_score>8.1</cvss3_base_score>
+        <cvss_base_score>6.8</cvss_base_score>
+        <cve>CVE-2022-43548</cve>
+        <cve>CVE-2022-32213</cve>
+        <risk_factor>High</risk_factor>
+      </ReportItem>
+      <!-- High: nginx outdated -->
+      <ReportItem port="80" svc_name="http" protocol="tcp" severity="3" pluginID="163049" pluginName="nginx &lt; 1.23.1 / 1.22.1 Multiple Vulnerabilities">
+        <description>The version of nginx installed on the remote host is prior to 1.22.1 (stable) or 1.23.1 (mainline) and is affected by vulnerabilities including request smuggling.</description>
+        <synopsis>The remote web server is outdated.</synopsis>
+        <cvss3_base_score>7.5</cvss3_base_score>
+        <cvss_base_score>5.0</cvss_base_score>
+        <cve>CVE-2022-41741</cve>
+        <cve>CVE-2022-41742</cve>
+        <risk_factor>High</risk_factor>
+      </ReportItem>
+      <!-- Medium: Outdated SSL Certificate -->
+      <ReportItem port="443" svc_name="https" protocol="tcp" severity="2" pluginID="57582" pluginName="SSL Certificate Expiry Approaching">
+        <description>The SSL certificate for this service will expire soon. The certificate expires within 30 days, which may cause service disruption.</description>
+        <synopsis>The SSL certificate for this service expires soon.</synopsis>
+        <cvss3_base_score>5.3</cvss3_base_score>
+        <risk_factor>Medium</risk_factor>
+      </ReportItem>
+      <!-- Medium: SSH Weak Keys -->
+      <ReportItem port="22" svc_name="ssh" protocol="tcp" severity="2" pluginID="150239" pluginName="SSH Weak Key Exchange Algorithms Enabled">
+        <description>The SSH server is configured to support weak key exchange algorithms including diffie-hellman-group1-sha1 and diffie-hellman-group14-sha1.</description>
+        <synopsis>SSH weak key exchange algorithms are enabled.</synopsis>
+        <cvss3_base_score>5.9</cvss3_base_score>
+        <cvss_base_score>4.3</cvss_base_score>
+        <risk_factor>Medium</risk_factor>
+      </ReportItem>
+      <!-- Low: HTTP TRACE method enabled -->
+      <ReportItem port="80" svc_name="http" protocol="tcp" severity="1" pluginID="11213" pluginName="HTTP TRACE / TRACK Methods Allowed">
+        <description>The remote web server supports the TRACE and/or TRACK HTTP methods. These methods are typically used for debugging web server connections. If enabled, they can allow cross-site scripting attacks.</description>
+        <synopsis>Debugging HTTP methods are enabled on the remote web server.</synopsis>
+        <cvss3_base_score>3.4</cvss3_base_score>
+        <cvss_base_score>2.6</cvss_base_score>
+        <risk_factor>Low</risk_factor>
+      </ReportItem>
+    </ReportHost>
+
+    <ReportHost name="db-prod-01.meridian.gov">
+      <HostProperties>
+        <tag name="host-ip">10.10.1.20</tag>
+        <tag name="host-fqdn">db-prod-01.meridian.gov</tag>
+        <tag name="operating-system">Linux Kernel 5.15 on RHEL 8.6</tag>
+        <tag name="HOST_END">Wed May 27 06:30:00 2026</tag>
+      </HostProperties>
+      <!-- Critical: PostgreSQL -->
+      <ReportItem port="5432" svc_name="postgresql" protocol="tcp" severity="4" pluginID="164435" pluginName="PostgreSQL &lt; 14.5 / 13.8 / 12.12 Multiple Vulnerabilities">
+        <description>The version of PostgreSQL installed on the remote host is affected by multiple vulnerabilities. A remote attacker can exploit these to perform SQL injection or gain elevated privileges.</description>
+        <synopsis>The remote database server is affected by multiple vulnerabilities.</synopsis>
+        <cvss3_base_score>8.8</cvss3_base_score>
+        <cvss_base_score>6.5</cvss_base_score>
+        <cve>CVE-2022-2625</cve>
+        <cve>CVE-2022-1552</cve>
+        <risk_factor>High</risk_factor>
+      </ReportItem>
+      <!-- High: MongoDB Unauth Access -->
+      <ReportItem port="27017" svc_name="mongodb" protocol="tcp" severity="3" pluginID="86220" pluginName="MongoDB Unauthenticated Access">
+        <description>The MongoDB instance on the remote host does not require authentication. A remote attacker can connect to this service and read or modify all databases.</description>
+        <synopsis>The remote MongoDB service allows unauthenticated connections.</synopsis>
+        <cvss3_base_score>9.8</cvss3_base_score>
+        <cvss_base_score>10.0</cvss_base_score>
+        <risk_factor>Critical</risk_factor>
+      </ReportItem>
+      <!-- High: Linux Kernel Privilege Escalation -->
+      <ReportItem port="0" svc_name="general" protocol="tcp" severity="4" pluginID="164133" pluginName="Linux Kernel &lt; 5.18.14 Privilege Escalation">
+        <description>The Linux kernel installed on the remote host is prior to 5.18.14 and is affected by a local privilege escalation vulnerability in the nft_object update path.</description>
+        <synopsis>The remote host is running a vulnerable version of the Linux kernel.</synopsis>
+        <cvss3_base_score>7.8</cvss3_base_score>
+        <cvss_base_score>7.2</cvss_base_score>
+        <cve>CVE-2022-2586</cve>
+        <cve>CVE-2022-34918</cve>
+        <risk_factor>High</risk_factor>
+      </ReportItem>
+      <!-- High: Dirty Pipe -->
+      <ReportItem port="0" svc_name="general" protocol="tcp" severity="4" pluginID="158699" pluginName="Linux Kernel 5.8.x &lt; 5.16.11 / 5.15.x &lt; 5.15.25 (Dirty Pipe)">
+        <description>The remote host is running a Linux kernel version affected by the 'Dirty Pipe' vulnerability (CVE-2022-0847). A local unprivileged user can use this flaw to gain write access to pages in the page cache backed by read-only files.</description>
+        <synopsis>The remote host is affected by a local privilege escalation vulnerability.</synopsis>
+        <cvss3_base_score>7.8</cvss3_base_score>
+        <cvss_base_score>7.2</cvss_base_score>
+        <cve>CVE-2022-0847</cve>
+        <risk_factor>High</risk_factor>
+      </ReportItem>
+      <!-- Medium: NTP Amplification -->
+      <ReportItem port="123" svc_name="ntp" protocol="udp" severity="2" pluginID="10884" pluginName="NTP monlist Command Information Disclosure">
+        <description>The remote NTP server responds to the 'monlist' command. This command returns the addresses of the most recent clients that have contacted the server, and can be abused for DDoS amplification attacks.</description>
+        <synopsis>The remote NTP server is vulnerable to DDoS amplification.</synopsis>
+        <cvss3_base_score>5.3</cvss3_base_score>
+        <cvss_base_score>5.0</cvss_base_score>
+        <risk_factor>Medium</risk_factor>
+      </ReportItem>
+      <!-- Medium: SSL RC4 Cipher Suites -->
+      <ReportItem port="5432" svc_name="postgresql" protocol="tcp" severity="2" pluginID="65821" pluginName="SSL RC4 Cipher Suites Supported">
+        <description>The remote service supports the use of the RC4 cipher. The RC4 cipher is flawed in its generation of a pseudo-random stream of bytes so that a wide variety of small biases are introduced into the stream.</description>
+        <synopsis>The remote service supports the use of the RC4 cipher.</synopsis>
+        <cvss3_base_score>5.9</cvss3_base_score>
+        <cvss_base_score>4.3</cvss_base_score>
+        <risk_factor>Medium</risk_factor>
+      </ReportItem>
+      <!-- Low: Open Portmapper -->
+      <ReportItem port="111" svc_name="rpc" protocol="tcp" severity="1" pluginID="10223" pluginName="RPC portmapper Service Detection">
+        <description>The RPC portmapper is running on this port. The portmapper allows users and applications to learn which ports RPC services are listening on.</description>
+        <synopsis>An RPC portmapper is running on the remote host.</synopsis>
+        <cvss3_base_score>2.6</cvss3_base_score>
+        <risk_factor>Low</risk_factor>
+      </ReportItem>
+    </ReportHost>
+
+    <ReportHost name="bastion-01.meridian.gov">
+      <HostProperties>
+        <tag name="host-ip">10.10.0.5</tag>
+        <tag name="host-fqdn">bastion-01.meridian.gov</tag>
+        <tag name="operating-system">Linux Kernel 5.15 on Amazon Linux 2</tag>
+        <tag name="HOST_END">Wed May 27 06:45:00 2026</tag>
+      </HostProperties>
+      <!-- High: OpenSSH outdated -->
+      <ReportItem port="22" svc_name="ssh" protocol="tcp" severity="3" pluginID="160251" pluginName="OpenSSH &lt; 9.0 Multiple Vulnerabilities">
+        <description>The version of OpenSSH installed on the remote host is prior to 9.0. It is affected by multiple vulnerabilities including a novel integer overflow in the RSA key parsing code.</description>
+        <synopsis>The SSH server running on the remote host is affected by multiple vulnerabilities.</synopsis>
+        <cvss3_base_score>7.5</cvss3_base_score>
+        <cvss_base_score>5.0</cvss_base_score>
+        <cve>CVE-2022-28739</cve>
+        <risk_factor>High</risk_factor>
+      </ReportItem>
+      <!-- High: Terrapin SSH Attack -->
+      <ReportItem port="22" svc_name="ssh" protocol="tcp" severity="3" pluginID="187372" pluginName="OpenSSH Terrapin Attack (CVE-2023-48795)">
+        <description>The remote SSH server is vulnerable to the Terrapin attack. This allows an attacker to truncate the handshake and downgrade security features negotiated during the connection setup.</description>
+        <synopsis>The remote SSH server is vulnerable to a man-in-the-middle attack.</synopsis>
+        <cvss3_base_score>7.5</cvss3_base_score>
+        <cve>CVE-2023-48795</cve>
+        <risk_factor>High</risk_factor>
+      </ReportItem>
+      <!-- High: Fail2ban not configured -->
+      <ReportItem port="22" svc_name="ssh" protocol="tcp" severity="2" pluginID="51192" pluginName="SSH Default Password Login">
+        <description>The remote SSH server accepts login using default credentials. An attacker may use this to gain unauthorized access.</description>
+        <synopsis>The remote SSH server accepts weak credentials.</synopsis>
+        <cvss3_base_score>7.2</cvss3_base_score>
+        <cvss_base_score>10.0</cvss_base_score>
+        <risk_factor>High</risk_factor>
+      </ReportItem>
+      <!-- Medium: SNMPv1/v2 -->
+      <ReportItem port="161" svc_name="snmp" protocol="udp" severity="2" pluginID="41028" pluginName="SNMP Agent Default Community Name (public)">
+        <description>The SNMP service is using the default community name 'public'. An attacker may use this default string to gain read access to the host's SNMP information.</description>
+        <synopsis>The SNMP server uses a known default password.</synopsis>
+        <cvss3_base_score>5.3</cvss3_base_score>
+        <cvss_base_score>5.0</cvss_base_score>
+        <risk_factor>Medium</risk_factor>
+      </ReportItem>
+    </ReportHost>
+
+    <ReportHost name="app-dev-01.meridian.gov">
+      <HostProperties>
+        <tag name="host-ip">10.10.2.50</tag>
+        <tag name="host-fqdn">app-dev-01.meridian.gov</tag>
+        <tag name="operating-system">Linux Kernel 5.15 on Ubuntu 20.04</tag>
+        <tag name="HOST_END">Wed May 27 07:00:00 2026</tag>
+      </HostProperties>
+      <!-- Critical: Jenkins RCE -->
+      <ReportItem port="8080" svc_name="http-alt" protocol="tcp" severity="4" pluginID="164059" pluginName="Jenkins &lt; 2.362 Multiple Vulnerabilities">
+        <description>The version of Jenkins installed on the remote host is affected by multiple vulnerabilities including an unauthenticated RCE via crafted HTTP requests to the Stapler framework.</description>
+        <synopsis>The remote host is running a vulnerable version of Jenkins.</synopsis>
+        <cvss3_base_score>9.8</cvss3_base_score>
+        <cvss_base_score>10.0</cvss_base_score>
+        <cve>CVE-2023-27898</cve>
+        <cve>CVE-2023-27905</cve>
+        <risk_factor>Critical</risk_factor>
+      </ReportItem>
+      <!-- Critical: Atlassian Confluence RCE -->
+      <ReportItem port="8090" svc_name="http-alt" protocol="tcp" severity="4" pluginID="165205" pluginName="Atlassian Confluence &lt; 7.4.17 RCE">
+        <description>The remote host is running a version of Atlassian Confluence affected by CVE-2022-26134. This allows an unauthenticated attacker to execute arbitrary code via OGNL injection.</description>
+        <synopsis>The remote web application is affected by an RCE vulnerability.</synopsis>
+        <cvss3_base_score>9.8</cvss3_base_score>
+        <cvss_base_score>10.0</cvss_base_score>
+        <cve>CVE-2022-26134</cve>
+        <risk_factor>Critical</risk_factor>
+      </ReportItem>
+      <!-- High: Docker exposed API -->
+      <ReportItem port="2375" svc_name="docker" protocol="tcp" severity="3" pluginID="110705" pluginName="Docker API Accessible Without Authentication">
+        <description>The remote Docker daemon API is accessible without authentication. An attacker can use this API to access all containers, images, and sensitive system information.</description>
+        <synopsis>The remote host is running an unauthenticated Docker API.</synopsis>
+        <cvss3_base_score>9.8</cvss3_base_score>
+        <cvss_base_score>10.0</cvss_base_score>
+        <risk_factor>Critical</risk_factor>
+      </ReportItem>
+      <!-- High: Python Flask debug mode -->
+      <ReportItem port="5000" svc_name="http-alt" protocol="tcp" severity="3" pluginID="162136" pluginName="Flask Debug Mode Enabled - Remote Code Execution">
+        <description>The remote Flask application has debug mode enabled, which exposes an interactive debugger that allows arbitrary Python code execution in the browser.</description>
+        <synopsis>The remote Flask application is running in debug mode.</synopsis>
+        <cvss3_base_score>9.8</cvss3_base_score>
+        <risk_factor>Critical</risk_factor>
+      </ReportItem>
+      <!-- Medium: Java outdated -->
+      <ReportItem port="0" svc_name="general" protocol="tcp" severity="2" pluginID="163278" pluginName="Oracle Java SE &lt; 8u341 / 11.0.16 / 17.0.4 Multiple Vulnerabilities">
+        <description>The version of Oracle Java SE installed on the remote host is prior to 8u341, 11.0.16, or 17.0.4. It is affected by multiple vulnerabilities.</description>
+        <synopsis>The remote host contains an outdated version of Oracle Java.</synopsis>
+        <cvss3_base_score>6.8</cvss3_base_score>
+        <cvss_base_score>5.0</cvss_base_score>
+        <cve>CVE-2022-21619</cve>
+        <cve>CVE-2022-21626</cve>
+        <risk_factor>Medium</risk_factor>
+      </ReportItem>
+      <!-- Medium: Git exposed -->
+      <ReportItem port="80" svc_name="http" protocol="tcp" severity="2" pluginID="106375" pluginName="Exposed Git Repository">
+        <description>The remote web server has a publicly accessible .git directory. This allows an attacker to retrieve the complete source code of the web application.</description>
+        <synopsis>The remote web server has an accessible .git directory.</synopsis>
+        <cvss3_base_score>5.3</cvss3_base_score>
+        <cvss_base_score>5.0</cvss_base_score>
+        <risk_factor>Medium</risk_factor>
+      </ReportItem>
+      <!-- Low: Server version disclosed -->
+      <ReportItem port="8080" svc_name="http-alt" protocol="tcp" severity="1" pluginID="10107" pluginName="HTTP Server Type and Version">
+        <description>This detects the HTTP server version by examining the HTTP banner. The remote host discloses its server version information which may help an attacker profile the target.</description>
+        <synopsis>The HTTP server version is disclosed in its banner.</synopsis>
+        <cvss3_base_score>0.0</cvss3_base_score>
+        <risk_factor>Informational</risk_factor>
+      </ReportItem>
+    </ReportHost>
+
+    <ReportHost name="storage-01.meridian.gov">
+      <HostProperties>
+        <tag name="host-ip">10.10.1.30</tag>
+        <tag name="host-fqdn">storage-01.meridian.gov</tag>
+        <tag name="operating-system">Linux Kernel 5.15 on CentOS 7.9</tag>
+        <tag name="HOST_END">Wed May 27 07:15:00 2026</tag>
+      </HostProperties>
+      <!-- Critical: Samba RCE -->
+      <ReportItem port="445" svc_name="cifs" protocol="tcp" severity="4" pluginID="99423" pluginName="Samba 4.x.x &lt; 4.13.17 / 4.14.x &lt; 4.14.12 RCE (CVE-2021-44142)">
+        <description>The version of Samba installed on the remote host is affected by a critical heap buffer overflow vulnerability in the vfs_fruit VFS module that may allow unauthenticated remote code execution as root.</description>
+        <synopsis>The remote Samba server is affected by a remote code execution vulnerability.</synopsis>
+        <cvss3_base_score>9.9</cvss3_base_score>
+        <cvss_base_score>9.0</cvss_base_score>
+        <cve>CVE-2021-44142</cve>
+        <risk_factor>Critical</risk_factor>
+      </ReportItem>
+      <!-- High: SMB Signing disabled -->
+      <ReportItem port="445" svc_name="cifs" protocol="tcp" severity="3" pluginID="57608" pluginName="SMB Signing Disabled">
+        <description>Signing is disabled on the remote SMB server. This can allow man-in-the-middle attacks against the SMB server.</description>
+        <synopsis>The remote SMB server has message signing disabled.</synopsis>
+        <cvss3_base_score>7.4</cvss3_base_score>
+        <cvss_base_score>5.8</cvss_base_score>
+        <risk_factor>High</risk_factor>
+      </ReportItem>
+      <!-- High: NFS World-Readable -->
+      <ReportItem port="2049" svc_name="nfs" protocol="tcp" severity="3" pluginID="11356" pluginName="NFS Exported Share Information Disclosure">
+        <description>At least one of the NFS shares exported by the remote server could be mounted by anyone. An attacker may be able to leverage this to read (and possibly write) files on the remote host.</description>
+        <synopsis>A remote attacker can access a shared directory.</synopsis>
+        <cvss3_base_score>9.1</cvss3_base_score>
+        <cvss_base_score>9.4</cvss_base_score>
+        <risk_factor>Critical</risk_factor>
+      </ReportItem>
+      <!-- High: vsftpd outdated -->
+      <ReportItem port="21" svc_name="ftp" protocol="tcp" severity="3" pluginID="118029" pluginName="vsftpd Backdoor">
+        <description>The remote vsftpd server contains a backdoor that provides a shell running with root privileges on TCP port 6200 if a smiley face is sent as part of the login username.</description>
+        <synopsis>The remote FTP server contains a backdoor.</synopsis>
+        <cvss3_base_score>9.8</cvss3_base_score>
+        <cvss_base_score>10.0</cvss_base_score>
+        <cve>CVE-2011-2523</cve>
+        <risk_factor>Critical</risk_factor>
+      </ReportItem>
+      <!-- Medium: Telnet enabled -->
+      <ReportItem port="23" svc_name="telnet" protocol="tcp" severity="2" pluginID="10281" pluginName="Telnet Server Detection">
+        <description>The remote host is running a Telnet server. Telnet is considered insecure because it transmits data in clear text, including authentication credentials.</description>
+        <synopsis>A Telnet server is running on the remote host.</synopsis>
+        <cvss3_base_score>5.9</cvss3_base_score>
+        <cvss_base_score>4.0</cvss_base_score>
+        <risk_factor>Medium</risk_factor>
+      </ReportItem>
+      <!-- Medium: Anonymous FTP -->
+      <ReportItem port="21" svc_name="ftp" protocol="tcp" severity="2" pluginID="10079" pluginName="Anonymous FTP Enabled">
+        <description>The remote FTP server allows anonymous connections. Any remote user may connect and authenticate without providing a password or unique credentials.</description>
+        <synopsis>Anonymous FTP is enabled on the remote host.</synopsis>
+        <cvss3_base_score>6.5</cvss3_base_score>
+        <cvss_base_score>5.0</cvss_base_score>
+        <risk_factor>Medium</risk_factor>
+      </ReportItem>
+      <!-- Low: Open Shares -->
+      <ReportItem port="445" svc_name="cifs" protocol="tcp" severity="1" pluginID="10395" pluginName="Microsoft Windows SMB Shares Enumeration">
+        <description>Using the supplied credentials, it was possible to enumerate shares on the remote Windows host.</description>
+        <synopsis>It is possible to enumerate remote network shares.</synopsis>
+        <cvss3_base_score>2.6</cvss3_base_score>
+        <risk_factor>Low</risk_factor>
+      </ReportItem>
+    </ReportHost>
+
+    <ReportHost name="monitor-01.meridian.gov">
+      <HostProperties>
+        <tag name="host-ip">10.10.1.40</tag>
+        <tag name="host-fqdn">monitor-01.meridian.gov</tag>
+        <tag name="operating-system">Linux Kernel 5.15 on Debian 11</tag>
+        <tag name="HOST_END">Wed May 27 07:30:00 2026</tag>
+      </HostProperties>
+      <!-- Critical: Grafana Path Traversal -->
+      <ReportItem port="3000" svc_name="http" protocol="tcp" severity="4" pluginID="156055" pluginName="Grafana 8.0.x &lt; 8.3.2 Directory Traversal (CVE-2021-43798)">
+        <description>The version of Grafana installed on the remote host is 8.0.x prior to 8.3.2. It is affected by a directory traversal vulnerability that allows an unauthenticated attacker to read arbitrary files.</description>
+        <synopsis>The remote web application is affected by a directory traversal vulnerability.</synopsis>
+        <cvss3_base_score>7.5</cvss3_base_score>
+        <cvss_base_score>5.0</cvss_base_score>
+        <cve>CVE-2021-43798</cve>
+        <risk_factor>High</risk_factor>
+      </ReportItem>
+      <!-- High: Prometheus metrics exposed -->
+      <ReportItem port="9090" svc_name="http-alt" protocol="tcp" severity="3" pluginID="126193" pluginName="Prometheus Unauthenticated Metrics Endpoint">
+        <description>The remote host is running a Prometheus server with an unauthenticated metrics endpoint. This discloses sensitive operational and application metrics.</description>
+        <synopsis>The remote Prometheus server is accessible without authentication.</synopsis>
+        <cvss3_base_score>7.5</cvss3_base_score>
+        <risk_factor>High</risk_factor>
+      </ReportItem>
+      <!-- High: Elasticsearch unauthenticated -->
+      <ReportItem port="9200" svc_name="elasticsearch" protocol="tcp" severity="3" pluginID="142214" pluginName="Elasticsearch Unauthenticated Access">
+        <description>The remote Elasticsearch instance is accessible without authentication. An attacker can query, modify, or delete all indexed data.</description>
+        <synopsis>The remote Elasticsearch server allows unauthenticated access.</synopsis>
+        <cvss3_base_score>9.1</cvss3_base_score>
+        <cvss_base_score>9.4</cvss_base_score>
+        <risk_factor>Critical</risk_factor>
+      </ReportItem>
+      <!-- Medium: Redis unauthenticated -->
+      <ReportItem port="6379" svc_name="redis" protocol="tcp" severity="2" pluginID="82956" pluginName="Redis Server Unauthenticated Access">
+        <description>The remote Redis server does not require authentication. An attacker can connect and execute arbitrary commands, read/write all keys, and potentially achieve code execution.</description>
+        <synopsis>The remote Redis server is accessible without authentication.</synopsis>
+        <cvss3_base_score>9.8</cvss3_base_score>
+        <cvss_base_score>10.0</cvss_base_score>
+        <risk_factor>Critical</risk_factor>
+      </ReportItem>
+      <!-- Medium: Kibana outdated -->
+      <ReportItem port="5601" svc_name="http-alt" protocol="tcp" severity="2" pluginID="145527" pluginName="Kibana &lt; 7.13.0 Prototype Pollution">
+        <description>The version of Kibana installed on the remote host is prior to 7.13.0 and is affected by prototype pollution vulnerabilities that can lead to arbitrary code execution.</description>
+        <synopsis>The remote Kibana instance is affected by prototype pollution vulnerabilities.</synopsis>
+        <cvss3_base_score>6.5</cvss3_base_score>
+        <cvss_base_score>5.0</cvss_base_score>
+        <cve>CVE-2021-22150</cve>
+        <risk_factor>Medium</risk_factor>
+      </ReportItem>
+      <!-- Low: Netdata metrics exposed -->
+      <ReportItem port="19999" svc_name="http-alt" protocol="tcp" severity="1" pluginID="119876" pluginName="Netdata Metrics Dashboard Accessible">
+        <description>The Netdata real-time monitoring dashboard is accessible without authentication. This exposes detailed system metrics including CPU, memory, disk, and network statistics.</description>
+        <synopsis>The remote Netdata dashboard is publicly accessible.</synopsis>
+        <cvss3_base_score>3.7</cvss3_base_score>
+        <risk_factor>Low</risk_factor>
+      </ReportItem>
+    </ReportHost>
+
+    <ReportHost name="mail-01.meridian.gov">
+      <HostProperties>
+        <tag name="host-ip">10.10.1.50</tag>
+        <tag name="host-fqdn">mail-01.meridian.gov</tag>
+        <tag name="operating-system">Linux Kernel 5.15 on Ubuntu 22.04</tag>
+        <tag name="HOST_END">Wed May 27 07:45:00 2026</tag>
+      </HostProperties>
+      <!-- Critical: Exim RCE -->
+      <ReportItem port="25" svc_name="smtp" protocol="tcp" severity="4" pluginID="153956" pluginName="Exim &lt; 4.94.2 Multiple Vulnerabilities (21Nails)">
+        <description>The version of Exim installed on the remote host is prior to 4.94.2 and is affected by multiple critical vulnerabilities collectively known as 21Nails. These include local and remote code execution vulnerabilities.</description>
+        <synopsis>The remote mail server is affected by multiple critical vulnerabilities.</synopsis>
+        <cvss3_base_score>9.8</cvss3_base_score>
+        <cvss_base_score>10.0</cvss_base_score>
+        <cve>CVE-2020-28017</cve>
+        <cve>CVE-2020-28020</cve>
+        <cve>CVE-2020-28026</cve>
+        <risk_factor>Critical</risk_factor>
+      </ReportItem>
+      <!-- High: Open SMTP Relay -->
+      <ReportItem port="25" svc_name="smtp" protocol="tcp" severity="3" pluginID="10539" pluginName="Open Mail Relay">
+        <description>The remote SMTP server appears to allow mail relay. An open relay allows a third-party to relay email to any destination, which is frequently abused by spammers.</description>
+        <synopsis>The remote SMTP server is an open mail relay.</synopsis>
+        <cvss3_base_score>7.5</cvss3_base_score>
+        <cvss_base_score>5.0</cvss_base_score>
+        <risk_factor>High</risk_factor>
+      </ReportItem>
+      <!-- High: STARTTLS not enforced -->
+      <ReportItem port="25" svc_name="smtp" protocol="tcp" severity="2" pluginID="40976" pluginName="SSL / TLS Renegotiation SMTP Extension Detected">
+        <description>The remote SMTP server supports SSL/TLS, but does not enforce STARTTLS for incoming connections. This allows connections to proceed without encryption.</description>
+        <synopsis>The remote SMTP server may transmit credentials in plaintext.</synopsis>
+        <cvss3_base_score>5.9</cvss3_base_score>
+        <cvss_base_score>4.3</cvss_base_score>
+        <risk_factor>Medium</risk_factor>
+      </ReportItem>
+      <!-- Medium: DMARC not configured -->
+      <ReportItem port="0" svc_name="general" protocol="tcp" severity="2" pluginID="164042" pluginName="DMARC Record Not Published">
+        <description>The domain associated with this host does not have a DMARC record. This can allow attackers to spoof the domain in phishing attacks.</description>
+        <synopsis>The domain is missing a DMARC record.</synopsis>
+        <cvss3_base_score>5.3</cvss3_base_score>
+        <risk_factor>Medium</risk_factor>
+      </ReportItem>
+      <!-- Low: SMTP banner discloses version -->
+      <ReportItem port="25" svc_name="smtp" protocol="tcp" severity="1" pluginID="10263" pluginName="SMTP Server Detection">
+        <description>An SMTP (Simple Mail Transfer Protocol) daemon is listening on this port. The banner discloses the mail server software and version, which may assist an attacker in targeting exploits.</description>
+        <synopsis>An SMTP server is running on the remote host.</synopsis>
+        <cvss3_base_score>0.0</cvss3_base_score>
+        <risk_factor>Informational</risk_factor>
+      </ReportItem>
+    </ReportHost>
+
+  </Report>
+</NessusClientData_v2>
