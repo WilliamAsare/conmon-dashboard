@@ -95,14 +95,12 @@ create policy "users read own org"
 -- RLS POLICIES: users
 -- ============================================================
 
--- Users can read profiles in their own org.
-create policy "users read own org members"
+-- Users can always read their own profile row directly.
+-- A subquery referencing public.users would be self-referential and recurse
+-- infinitely, so we use a direct identity check instead.
+create policy "users read own profile"
   on public.users for select
-  using (
-    organization_id = (
-      select organization_id from public.users where id = auth.uid()
-    )
-  );
+  using (id = auth.uid());
 
 -- Users can update their own profile.
 create policy "users update own profile"
