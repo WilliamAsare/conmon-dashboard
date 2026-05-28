@@ -1,6 +1,10 @@
 -- Migration: organizations, users, systems
 -- RLS is enabled and policies are defined in this same file.
 -- Do not edit this migration after it has been committed.
+--
+-- ORDERING NOTE: All tables are created first, then RLS policies are added.
+-- Postgres validates policy expressions at CREATE POLICY time, so any policy
+-- that references another table requires that table to already exist.
 
 -- ============================================================
 -- EXTENSIONS
@@ -9,7 +13,15 @@
 create extension if not exists "uuid-ossp";
 
 -- ============================================================
--- organizations
+-- TYPES
+-- ============================================================
+
+create type user_role as enum ('admin', 'issm', 'isso', 'engineer', 'auditor');
+create type fedramp_level as enum ('Low', 'Moderate', 'High');
+create type system_status as enum ('active', 'sunset');
+
+-- ============================================================
+-- TABLE: organizations
 -- ============================================================
 
 create table organizations (
@@ -20,23 +32,9 @@ create table organizations (
 
 alter table organizations enable row level security;
 
--- Users may only read organizations they belong to.
-create policy "users read own org"
-  on organizations for select
-  using (
-    id in (
-      select organization_id from public.users where id = auth.uid()
-    )
-  );
-
--- Organization creation happens via the registration server action (service role).
--- No direct client INSERT is permitted.
-
 -- ============================================================
--- users  (extends auth.users)
+-- TABLE: users  (extends auth.users)
 -- ============================================================
-
-create type user_role as enum ('admin', 'issm', 'isso', 'engineer', 'auditor');
 
 create table public.users (
   id               uuid primary key references auth.users(id) on delete cascade,
@@ -48,27 +46,9 @@ create table public.users (
 
 alter table public.users enable row level security;
 
--- Users can read profiles in their own org.
-create policy "users read own org members"
-  on public.users for select
-  using (
-    organization_id = (
-      select organization_id from public.users where id = auth.uid()
-    )
-  );
-
--- Users can update their own profile.
-create policy "users update own profile"
-  on public.users for update
-  using (id = auth.uid())
-  with check (id = auth.uid());
-
 -- ============================================================
--- systems
+-- TABLE: systems
 -- ============================================================
-
-create type fedramp_level as enum ('Low', 'Moderate', 'High');
-create type system_status as enum ('active', 'sunset');
 
 create table systems (
   id                  uuid primary key default uuid_generate_v4(),
@@ -93,6 +73,46 @@ create table systems (
 );
 
 alter table systems enable row level security;
+
+-- ============================================================
+-- RLS POLICIES: organizations
+-- (defined after public.users exists so the subquery is valid)
+-- ============================================================
+
+-- Users may only read organizations they belong to.
+create policy "users read own org"
+  on organizations for select
+  using (
+    id in (
+      select organization_id from public.users where id = auth.uid()
+    )
+  );
+
+-- Organization creation is handled by the auth trigger (security definer).
+-- No direct client INSERT is permitted.
+
+-- ============================================================
+-- RLS POLICIES: users
+-- ============================================================
+
+-- Users can read profiles in their own org.
+create policy "users read own org members"
+  on public.users for select
+  using (
+    organization_id = (
+      select organization_id from public.users where id = auth.uid()
+    )
+  );
+
+-- Users can update their own profile.
+create policy "users update own profile"
+  on public.users for update
+  using (id = auth.uid())
+  with check (id = auth.uid());
+
+-- ============================================================
+-- RLS POLICIES: systems
+-- ============================================================
 
 create policy "users read org systems"
   on systems for select
