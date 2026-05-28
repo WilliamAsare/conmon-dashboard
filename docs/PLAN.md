@@ -140,4 +140,17 @@ These are open questions I want resolved before or early in Phase 1. I will not 
 
 ## Completed Work
 
-Nothing yet. Awaiting approval of ADR 0001 and this plan before Phase 1 begins.
+### Phase 1 -- Complete (2026-05-27)
+- Next.js 15.5.18 app deployed to Vercel: https://conmon-dashboard.vercel.app
+- GitHub: https://github.com/WilliamAsare/conmon-dashboard
+- 5 migrations, all tables with RLS, all functions and triggers verified
+- Auth flows: email/password, magic link, org-creation trigger, session middleware
+- SLA Edge Function (supabase/functions/sla-recalculate)
+- 46 unit tests passing (severity, SLA, POA&M formatting)
+- Checkpoint passed: sign in, org created (Meridian Finance), dashboard loads, RLS scoped correctly
+
+**Bugs fixed during Phase 1:**
+- Migration 001: forward-reference in RLS policies (tables must exist before policies)
+- public.users SELECT policy: self-referential subquery caused infinite recursion -- replaced with `id = auth.uid()`
+- Auth trigger: added idempotent guard and explicit error re-raise
+- Login page: now displays URL ?error= param visibly
